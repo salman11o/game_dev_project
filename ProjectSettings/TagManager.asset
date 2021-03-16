@@ -44,11 +44,11 @@ TagManager:
   - name: Floor
     uniqueID: 3135321723
     locked: 0
-  - name: Player
-    uniqueID: 3040915897
-    locked: 0
   - name: Wall
     uniqueID: 3279025757
+    locked: 0
+  - name: Player
+    uniqueID: 3040915897
     locked: 0
   - name: Objects
     uniqueID: 3644301725

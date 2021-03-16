@@ -42,10 +42,6 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("speedY", speedY);
         }
         animator.SetFloat("xMove", movement.x);
-        /*
-        animator.SetFloat("speedX", Mathf.Abs(movement.x));
-        animator.SetFloat("speedY", Mathf.Abs(movement.y));
-        */
     }
 
     void FixedUpdate() {
