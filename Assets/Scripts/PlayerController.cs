@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float movespeed = 20f;
+    public float movespeed = 5f;
 
     public Animator animator;
 
-    public float hf = 0.0f;
-    public float vf = 0.0f;
+    public float hf;
+    public float vf;
 
     public Vector2 movement;
 
@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     {
         animator = this.GetComponent<Animator>();
         rb = this.GetComponent<Rigidbody2D>();
+
+        this.hf = 0f;
     }
 
     // Update is called once per frame
@@ -29,12 +31,16 @@ public class PlayerController : MonoBehaviour
         movement.y = Input.GetAxisRaw("Vertical");
         
 
-        hf = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
-        vf = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
+        // hf = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
+        // vf = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
 
-        animator.SetFloat("Horizontal", hf);
-        animator.SetFloat("Vertical", movement.y);
-        animator.SetFloat("Speed", vf);     
+        if (Mathf.Abs(movement.x) < 0.01f && Mathf.Abs(movement.y) < 0.01f)
+        {
+            animator.SetBool("isMoving", false);
+        } else {
+            animator.SetBool("isMoving", true);
+        }
+        animator.SetFloat("xMove", movement.x);
         
     }
 
