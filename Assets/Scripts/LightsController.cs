@@ -35,7 +35,7 @@ public class LightsController : MonoBehaviour
     void Start()
     {
         StartCoroutine(Flicker());
-        light2d = GetComponent<Light2D>();
+        this.light2d = GetComponent<Light2D>();
     }
 
     // Update is called once per frame
