@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnityEngine.Experimental.Rendering.Universal; 
+
 public class PlayerController : MonoBehaviour
 {
     public float movespeed = 5f;
@@ -10,6 +12,8 @@ public class PlayerController : MonoBehaviour
 
     public float speedX;
     public float speedY;
+
+    public Transform flashlight;
 
     public Vector2 movement;
 
@@ -20,6 +24,7 @@ public class PlayerController : MonoBehaviour
     {
         animator = this.GetComponent<Animator>();
         rb = this.GetComponent<Rigidbody2D>();
+        flashlight = transform.Find("Flashlight");
     }
 
     // Update is called once per frame
@@ -42,9 +47,16 @@ public class PlayerController : MonoBehaviour
             animator.SetFloat("speedY", speedY);
         }
         animator.SetFloat("xMove", movement.x);
+
     }
 
     void FixedUpdate() {
         rb.MovePosition(rb.position + movement * movespeed * Time.fixedDeltaTime);
+
+        // Flashlight rotation
+        if (Mathf.Abs(movement.x) > 0.01 || Mathf.Abs(movement.y) > 0.01)
+        {
+            flashlight.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(movement.y, movement.x) * Mathf.Rad2Deg - 90);
+        }
     }
 }
