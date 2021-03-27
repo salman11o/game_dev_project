@@ -32,9 +32,12 @@ public class PlayerController : MonoBehaviour
 
     public Joystick joystick;
 
+    public List<string> inventory;
+
     // Start is called before the first frame update
     void Start()
     {
+        inventory = new List<string>();
         animator = this.GetComponent<Animator>();
         rb = this.GetComponent<Rigidbody2D>();
         flashlight = transform.Find("Flashlight");
@@ -48,6 +51,7 @@ public class PlayerController : MonoBehaviour
         quartersDoor = GameObject.Find("QuartersDoor").GetComponent<Tilemap>();
         controlRoomDoor = GameObject.Find("ControlRoomDoor").GetComponent<Tilemap>();
         engine = GameObject.Find("Engine").GetComponent<Tilemap>();
+
     }
 
     // Update is called once per frame
@@ -108,6 +112,9 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("collided with " + collision.gameObject.name);
+
+
         if (collision.gameObject.name != "WallTiles")
         {
             if (collision.gameObject.name == "Engine")
@@ -115,12 +122,27 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Near Engine");
             } else if (collision.gameObject.name == "CaptainKey")
             {
-                Debug.Log("Collide with Key");
                 Debug.Log(collision.otherRigidbody.position);
-                captainKey.SetTile(captainKey.WorldToCell(collision.otherRigidbody.position), null);
+                captainKey.ClearAllTiles();
+                inventory.Add("CaptainKey");
+            } else if (collision.gameObject.name == "QuartersDoor")
+            {
+                if (inventory.Contains("CaptainKey"))
+                {
+                    TaskController.instance.EnterDoorArea();
+                }
             }
         }
 
+    }
+
+
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.name == "QuartersDoor")
+        {
+            TaskController.instance.ExitDoorArea();
+        }
     }
 
 }

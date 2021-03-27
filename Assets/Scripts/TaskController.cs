@@ -9,11 +9,30 @@ public class TaskController : MonoBehaviour
     public static TaskController instance;
 
     public event Action onClickEngine;
-    public event Action onClickDoor;
     public event Action onClickScreen;
 
+    public event Action onEnterDoorArea;
+    public event Action onExitDoorArea;
 
-    void ClickEngine()
+    public event Action onUnlockDoor;
+
+    public void ExitDoorArea()
+    {
+        if (onEnterDoorArea != null)
+        {
+            onExitDoorArea();
+        }
+    }
+
+    public void EnterDoorArea()
+    {
+        if (onEnterDoorArea != null)
+        {
+            onEnterDoorArea();
+        }
+    }
+
+    public void ClickEngine()
     {
         if (onClickEngine != null)
         {
@@ -22,16 +41,16 @@ public class TaskController : MonoBehaviour
 
     }
 
-    void ClickDoor()
+    public void UnlockDoor()
     {
-        if (onClickDoor != null)
+        if (onUnlockDoor != null)
         {
-            onClickDoor();
+            onUnlockDoor();
         }
 
     }
 
-    void ClickScreen()
+    public void ClickScreen()
     {
         if (onClickScreen != null)
         {
