@@ -7,7 +7,7 @@ public class HudController : MonoBehaviour
     public GameObject Hud;
 
     public GameObject KeyHudPrefab;
-    public GameObject KeyHud;
+    GameObject KeyHud;
     
     // Start is called before the first frame update
     void Start()
@@ -27,9 +27,9 @@ public class HudController : MonoBehaviour
         Destroy(KeyHud);
     }
 
-    void pressKeyHud()
+    public void PressKeyHud()
     {
-        
+        TaskController.instance.UnlockDoor();
     }
 
 }
