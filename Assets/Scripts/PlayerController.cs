@@ -37,13 +37,25 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // To be later implemented as a HUD element
         inventory = new List<string>();
+
+        // Animator is passed absolute speed (x and y) and movement in the x direction
         animator = this.GetComponent<Animator>();
+
+        // Rigidbody handles movement and enables collisions
         rb = this.GetComponent<Rigidbody2D>();
+
+        // transform.Find() finds the child object. Flashlight moves with the player so it's childed.
         flashlight = transform.Find("Flashlight");
 
+        // Used to find coordinates when screen is tapped (in Update() function)
         grid = FindObjectOfType<Grid>();
 
+        // Tilemap objects. These are later to be removed from here and all collisions are
+        // to be handled in the tilemap objects themselves. 
+        // Used to change and remove tiles. Note that this is not the Tilemap Objects itself but
+        // its "Tilemap" Component.
         wallTiles = GameObject.Find("WallTiles").GetComponent<Tilemap>();
         floorTiles = GameObject.Find("FloorTiles").GetComponent<Tilemap>();
         overlayTiles = GameObject.Find("ObjectTiles").GetComponent<Tilemap>();
@@ -57,46 +69,36 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // Vector for movement. Value from -1 to 1 is passed from joystick object 
+        // for each axis
         movement.x = joystick.Horizontal;
         movement.y = joystick.Vertical;
         
+        // Animator needs an absolute velocity (0-1) to detect if the player
+        // is moving. Animation stops when both x and y are less than 0.01
+        animator.SetFloat("speedX", Mathf.Abs(movement.x));
+        animator.SetFloat("speedY", Mathf.Abs(movement.y));
 
-        // hf = movement.x > 0.01f ? movement.x : movement.x < -0.01f ? 1 : 0;
-        // vf = movement.y > 0.01f ? movement.y : movement.y < -0.01f ? 1 : 0;
-
-
-        if (Mathf.Abs(movement.x) > 0.01f || Mathf.Abs(movement.y) > 0.01f)
-        {
-            speedX = Mathf.Abs(movement.x);
-            speedY = Mathf.Abs(movement.y);
-
-            animator.SetFloat("speedX", speedX);
-            animator.SetFloat("speedY", speedY);
-        }
-
+        // Animator also needs an x movement to see if the player is moving left or right
+        // so it can change the animation (from spritesheet) accordingly
         animator.SetFloat("xMove", movement.x);
 
-
+        // touchCount returns the number of touches currently on screen. 
         if (Input.touchCount > 0)
         {
+            // GetTouch(int i) gets number ith touch on screen. The position property is
+            // a Vector2. 
             Vector2 touchPos = Input.GetTouch(0).position;
 
+            // Convert the Vector2 touch position to world position in 3D space.
+            // The z-coordinate added is the same as that of the grid here.
             Vector3 touchWorldPos = Camera.main.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 6));
 
+            // We need discrete cell coordinates for our grid instead of world coordinates
+            // WorldToCell returns a Vector3Int.
             Vector3Int coordinate = grid.WorldToCell(touchWorldPos);
             
-            Debug.Log(coordinate);
-
-            if (overlayTiles.HasTile(coordinate))
-            {
-                Debug.Log("is");
-            }
-
-            if (quartersDoor.HasTile(coordinate))
-            {
-                Debug.Log("quarterdoor");
-                quartersDoor.ClearAllTiles();
-            }
+            Debug.Log("touch at" + coordinate);
         }
     }
 

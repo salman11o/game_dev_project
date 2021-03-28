@@ -61,6 +61,7 @@ public class TaskController : MonoBehaviour
 
     void Awake()
     {
+        // This will be reference as a singleton in other GameObjects
         instance = this;
     }
 
