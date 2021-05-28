@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
+using UnityEngine.SceneManagement;
 using UnityEngine.Experimental.Rendering.Universal; 
 
 public class PlayerController : MonoBehaviour
@@ -117,12 +117,12 @@ public class PlayerController : MonoBehaviour
         Debug.Log("collided with " + collision.gameObject.name);
 
 
-        if (collision.gameObject.name != "WallTiles")
+        if (collision.gameObject.tag.Equals("Alien"))
         {
-            if (collision.gameObject.name == "Engine")
-            {
-                Debug.Log("Near Engine");
-            } else if (collision.gameObject.name == "CaptainKey")
+            Debug.Log("Game Over");
+            SceneManager.LoadScene("InGameScene");
+        }
+              else if (collision.gameObject.name == "CaptainKey")
             {
                 Debug.Log(collision.otherRigidbody.position);
                 captainKey.ClearAllTiles();
@@ -133,10 +133,17 @@ public class PlayerController : MonoBehaviour
                 {
                     TaskController.instance.EnterDoorArea();
                 }
+
+
             }
+              else if (collision.gameObject.name == "FinalDoors")
+        {
+            Debug.Log("You Win");
+            SceneManager.LoadScene("MainMenuScene");
+        }
         }
 
-    }
+    
 
 
     void OnCollisionExit2D(Collision2D collision)
@@ -146,5 +153,6 @@ public class PlayerController : MonoBehaviour
             TaskController.instance.ExitDoorArea();
         }
     }
+    
 
 }
