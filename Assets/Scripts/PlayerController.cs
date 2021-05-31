@@ -103,6 +103,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void FixedUpdate() {
+    //checks if there is ant movement from the player so that that flashlight is in the same direction that of player's
         rb.MovePosition(rb.position + movement * movespeed * Time.fixedDeltaTime);
 
         // Flashlight rotation
